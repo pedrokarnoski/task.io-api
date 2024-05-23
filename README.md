@@ -2,7 +2,7 @@
 
 ## Configurando ambiente de desenvolvimento
 - Realizar fork do reposítório.
-- Clonar o reposítório.
+- Clonar o reposítório forkado.
 - Rodar o seguinte comando para adicionar a upstream:
     - `git remote add upstream https://github.com/Task-io/task.io-api`
 - Atualizar repositório:
