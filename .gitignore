@@ -25,3 +25,6 @@ coverage/
 # Miscellaneous
 .DS_Store
 Thumbs.db
+
+# Docker
+db-task-io
