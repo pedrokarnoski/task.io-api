@@ -44,6 +44,11 @@ exports.createUser = async (req, res, next) => {
 
     res.status(201).json({ user });
   } catch (error) {
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      // Username already exists
+      return next(new AppError('Escolha outro nome de usuário.'));
+    }
+
     next(new AppError('Erro ao criar usuário.', 500));
   }
 };
