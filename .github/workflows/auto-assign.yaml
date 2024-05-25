@@ -12,8 +12,8 @@ jobs:
       pull-requests: write
     steps:
     - name: 'Auto-assign issue'
-      uses: pozil/auto-assign-issue@v1
+      uses: pozil/auto-assign-issue@v2.0.0
       with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
           assignees: MarcusToledo
           numOfAssignee: 1
