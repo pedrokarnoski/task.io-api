@@ -9,9 +9,9 @@ const errorMiddleware = require('./middlewares/errorMiddleware');
 
 const app = express();
 
+app.use(corsMiddleware);
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
-app.use(corsMiddleware);
 
 // Test route
 app.get('/', (req, res, next) => {
