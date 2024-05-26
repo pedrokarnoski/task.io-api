@@ -7,7 +7,7 @@
 - Rodar o seguinte comando para adicionar a upstream:
     - `git remote add upstream https://github.com/Task-io/task.io-api`
 - Bloquear push para upstream:
-    - `git remote set-url --push origin NO_PUSH`
+    - `git remote set-url --push upstream NO_PUSH`
 - Atualizar repositório:
     - `git pull upstream main`
 - Para enviar as alterações (Sempre deve ser enviado para sua origin):
