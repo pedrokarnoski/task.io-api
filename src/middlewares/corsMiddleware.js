@@ -1,7 +1,12 @@
-const corsMiddleware = (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  next();
+const cors = require('cors');
+
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 };
+
+const corsMiddleware = cors(corsOptions);
 
 module.exports = corsMiddleware;
