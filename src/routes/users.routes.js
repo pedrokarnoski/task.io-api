@@ -1,5 +1,9 @@
+const { checkAuthMiddleware } = require('../middlewares/checkAuthMiddleware');
 const controller = require('../controllers/UsersController');
 const router = require('express').Router();
+
+// Middleware de autenticação
+router.use(checkAuthMiddleware);
 
 // CRUD Routes
 router.get('/', controller.getUsers); /** /users **/
