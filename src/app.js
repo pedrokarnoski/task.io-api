@@ -2,6 +2,8 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const sequelize = require('./config/database');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger.json');
 
 const routes = require("./routes");
 
@@ -14,6 +16,7 @@ app.use(corsMiddleware);
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 // Test route
 app.get('/', (req, res, next) => {
@@ -21,7 +24,7 @@ app.get('/', (req, res, next) => {
 });
 
 // Routes
-app.use(routes);
+app.use("/v1", routes);
 
 // Error handling
 app.use(errorMiddleware);

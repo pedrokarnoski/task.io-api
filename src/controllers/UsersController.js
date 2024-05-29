@@ -23,7 +23,7 @@ exports.getUser = async (req, res, next) => {
     if (!user) {
       next(new AppError('Usuário não encontrado.', 404));
     }
-    res.status(200).json(user);
+    res.status(200).json({ user });
   } catch (error) {
     next(new AppError('Erro ao buscar usuário.', 500));
   }
