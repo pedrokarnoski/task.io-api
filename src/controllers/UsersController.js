@@ -23,7 +23,7 @@ exports.getUser = async (req, res, next) => {
     if (!user) {
       next(new AppError('Usuário não encontrado.', 404));
     }
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (error) {
     next(new AppError('Erro ao buscar usuário.', 500));
   }
@@ -57,7 +57,7 @@ exports.createUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { oldPassword, newPassword } = req.body;
+    const { name, oldPassword, newPassword } = req.body;
 
     const user = await User.findByPk(userId);
 
@@ -83,6 +83,7 @@ exports.updateUser = async (req, res, next) => {
 
     const hashedNewPassword = await bcrypt.hash(newPassword, 12);
 
+    user.name = name;
     user.password = hashedNewPassword;
 
     await user.save();
