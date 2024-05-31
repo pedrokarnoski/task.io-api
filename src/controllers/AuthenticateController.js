@@ -27,9 +27,7 @@ exports.authenticate = async (req, res, next) => {
     return res
       .cookie('access_token', token, { httpOnly: true, maxAge: 3600000 })
       .status(200)
-      .json({
-        username: user.username,
-      });
+      .json();
   } catch (error) {
     next(new AppError('Erro ao tentar fazer login.', 500));
   }

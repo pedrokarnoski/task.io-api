@@ -14,8 +14,9 @@ exports.checkAuthMiddleware = (req, res, next) => {
     }
 
     req.user = {
-      id: user
+      id: user.id
     }
+
     next();
   })
 }

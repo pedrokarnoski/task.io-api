@@ -113,3 +113,17 @@ exports.deleteUser = async (req, res, next) => {
     next(new AppError('Erro ao deletar usuário.', 500));
   }
 };
+
+// Me
+exports.getMe = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findByPk(id);
+    if (!user) {
+      next(new AppError('Usuário não encontrado.', 404));
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    next(new AppError('Erro ao buscar usuário.', 500));
+  }
+};
