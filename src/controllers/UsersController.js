@@ -88,7 +88,7 @@ exports.updateUser = async (req, res, next) => {
 
     await user.save();
 
-    return res.status(200).json({ user });
+    return res.status(200).json(user);
   } catch (error) {
     console.error(error)
     next(new AppError('Erro ao atualizar usuário.', 500));
@@ -118,6 +118,7 @@ exports.deleteUser = async (req, res, next) => {
 exports.getMe = async (req, res, next) => {
   try {
     const { id } = req.user;
+
     const user = await User.findByPk(id);
     if (!user) {
       next(new AppError('Usuário não encontrado.', 404));
