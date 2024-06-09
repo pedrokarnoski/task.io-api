@@ -5,7 +5,7 @@ const authenticateRouter = require("./authenticate.routes");
 const usersRouter = require("./users.routes");
 const tasksRouter = require("./tasks.routes");
 
-routes.use("/authenticate", authenticateRouter);
+routes.use("/", authenticateRouter);
 routes.use("/users", usersRouter);
 routes.use("/tasks", tasksRouter);
 
