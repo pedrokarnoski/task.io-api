@@ -68,12 +68,13 @@ exports.updateTask = async (req, res, next) => {
       next(new AppError("Tarefa não encontrada", 404));
     }
 
-    if (!description && !completed) {
-      next(AppError("Informe a descrição da tarefa."));
+    if (description !== undefined) {
+      task.description = description;
     }
 
-    task.description = description;
-    task.completed = completed;
+    if (completed !== undefined) {
+      task.completed = completed;
+    }
 
     await task.save();
 

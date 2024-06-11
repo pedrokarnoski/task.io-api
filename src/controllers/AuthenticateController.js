@@ -34,3 +34,10 @@ exports.authenticate = async (req, res, next) => {
     next(new AppError('Erro ao tentar fazer login.', 500));
   }
 };
+
+// SignOut
+exports.signOut = (req, res) => {
+  res.clearCookie('access_token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+
+  return res.status(200).json({ message: 'Logout realizado com sucesso.' });
+};
