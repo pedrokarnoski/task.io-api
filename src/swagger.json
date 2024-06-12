@@ -355,6 +355,280 @@
           }
         }
       }
+    },
+    "/comments/my": {
+      "get": {
+        "summary": "Busca de comentários do usuário logado",
+        "description": "Essa rota será responsável por buscar todos os comentários do usuário atualmente autenticado.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhum comentário encontrado"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "commentList": {
+                    "value": {
+                      "comments": [
+                        {
+                          "id": 1,
+                          "content": "Comentário 1",
+                          "createdAt": "2024-05-29T02:23:43.087Z",
+                          "updatedAt": "2024-05-29T02:23:43.087Z"
+                        },
+                        {
+                          "id": 2,
+                          "content": "Comentário 2",
+                          "createdAt": "2024-05-29T02:23:43.087Z",
+                          "updatedAt": "2024-05-29T02:23:43.087Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comments": {
+      "post": {
+        "summary": "Cadastro de comentário",
+        "description": "Essa rota será responsável por cadastrar um novo comentário.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "comment": {
+                  "value": {
+                    "taskId": 1,
+                    "comment": "Comentário 1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "comment": {
+                    "value": {
+                      "comment": {
+                        "id": 1,
+                        "content": "Comentário 1",
+                        "createdAt": "2024-05-29T02:23:43.087Z",
+                        "updatedAt": "2024-05-29T02:23:43.087Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comments/{taskId}": {
+      "get": {
+        "summary": "Busca de comentários por ID da tarefa",
+        "description": "Essa rota será responsável por buscar todos os comentários da tarefa especificada por ID.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da tarefa para busca de comentários",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhum comentário encontrado"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "content": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "commentList": {
+                    "value": {
+                      "comments": [
+                        {
+                          "id": 1,
+                          "content": "Comentário 1",
+                          "createdAt": "2024-05-29T02:23:43.087Z",
+                          "updatedAt": "2024-05-29T02:23:43.087Z"
+                        },
+                        {
+                          "id": 2,
+                          "content": "Comentário 2",
+                          "createdAt": "2024-05-29T02:23:43.087Z",
+                          "updatedAt": "2024-05-29T02:23:43.087Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comments/{taskId}/{commentId}": {
+      "delete": {
+        "summary": "Exclusão de comentário por ID da tarefa e ID do comentário",
+        "description": "Esta rota é responsável por excluir o comentário especificado por ID da tarefa e ID do comentário.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da tarefa para exclusão do comentário",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "commentId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do comentário para exclusão",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhum comentário encontrado"
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -381,6 +655,30 @@
             "type": "string"
           }
         }
+      },
+      "comments": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "taskId": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      
       }
     },
     "securitySchemes": {
