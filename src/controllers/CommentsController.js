@@ -42,15 +42,15 @@ exports.createComment = async (req, res, next) => {
     }
 
     const userId = req.user.id;
-    const { taskId, description } = req.body;
+    const { taskId, comment } = req.body;
 
-    if (!taskId || !description) {
+    if (!taskId || !comment) {
       next(new AppError("Informe a tarefa e a descrição do comentário."));
     }
 
-    const comment = await Comments.create({ taskId, userId, description });
+    const commentCreated = await Comments.create({ taskId, userId, comment });
 
-    res.status(201).json({ comment });
+    res.status(201).json({ commentCreated });
   } catch (error) {
     next(new AppError("Erro ao criar comentário.", 500));
   }
