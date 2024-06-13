@@ -7,7 +7,7 @@ const Comments = db.define("comments", {
     primaryKey: true,
     autoIncrement: true,
   },
-  comment: {
+  content: {
     type: DataTypes.STRING,
     allowNull: false,
   },
