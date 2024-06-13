@@ -36,7 +36,6 @@ exports.getCommentByTaskId = async (req, res, next) => {
 // Create comment on a task
 exports.createComment = async (req, res, next) => {
   try {
-    
     if (!req.user || !req.user.id) {
       next(new AppError("Usuário não autenticado.", 401));
     }
@@ -59,16 +58,16 @@ exports.createComment = async (req, res, next) => {
 // Update comment by id and task id
 exports.updateComment = async (req, res, next) => {
   try {
-    const { commentId, taskId } = req.params;
-    const { description } = req.body;
+    const { commentId } = req.params;
+    const { content } = req.body;
 
-    const comment = await Comments.findOne({ where: { id: commentId, taskId } });
+    const comment = await Comments.findByPk(commentId);
 
     if (!comment) {
       next(new AppError("Comentário não encontrado.", 404));
     }
 
-    comment.description = description;
+    comment.content = content;
     await comment.save();
 
     res.status(200).json({ comment });
@@ -80,9 +79,9 @@ exports.updateComment = async (req, res, next) => {
 // Delete comment by id and task id
 exports.deleteComment = async (req, res, next) => {
   try {
-    const { commentId, taskId } = req.params;
+    const { commentId } = req.params;
 
-    const comment = await Comments.findOne({ where: { id: commentId, taskId } });
+    const comment = await Comments.findByPk(commentId);
 
     if (!comment) {
       next(new AppError("Comentário não encontrado.", 404));
@@ -95,7 +94,6 @@ exports.deleteComment = async (req, res, next) => {
     next(new AppError("Erro ao deletar comentário.", 500));
   }
 };
-
 
 // Get current user comments
 exports.getMy = async (req, res, next) => {

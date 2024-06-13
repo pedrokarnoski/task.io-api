@@ -9,6 +9,6 @@ router.use(checkAuthMiddleware);
 router.get('/my', controller.getMy); /** /comments/my **/
 router.get('/:taskId', controller.getCommentByTaskId); /** /comments/:taskId **/
 router.post('/', controller.createComment); /** /comments **/
-router.delete('/:taskId/:commentId', controller.deleteComment); /** /comments/:taskId/:commentId **/
+router.delete('/:taskId', controller.deleteComment); /** /comments/:taskId/ **/
 
 module.exports = router;
