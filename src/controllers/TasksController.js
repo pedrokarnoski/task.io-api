@@ -94,7 +94,7 @@ exports.deleteTask = async (req, res, next) => {
     const task = await Task.findByPk(taskId);
 
     if (!task) {
-      next(new AppError('Tarefa não encontrado.', 404));
+      next(new AppError('Tarefa não encontrada.', 404));
     }
 
     // Task related comments
