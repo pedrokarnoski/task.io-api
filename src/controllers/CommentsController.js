@@ -41,21 +41,21 @@ exports.createComment = async (req, res, next) => {
     }
 
     const userId = req.user.id;
-    const { taskId, comment } = req.body;
+    const { taskId, content } = req.body;
 
-    if (!taskId || !comment) {
+    if (!taskId || !content) {
       next(new AppError("Informe a tarefa e a descrição do comentário."));
     }
 
-    const commentCreated = await Comments.create({ taskId, userId, comment });
+    const comment = await Comments.create({ taskId, userId, content });
 
-    res.status(201).json({ commentCreated });
+    res.status(201).json({ comment });
   } catch (error) {
     next(new AppError("Erro ao criar comentário.", 500));
   }
 };
 
-// Update comment by id and task id
+// Update comment by id
 exports.updateComment = async (req, res, next) => {
   try {
     const { commentId } = req.params;
@@ -76,7 +76,7 @@ exports.updateComment = async (req, res, next) => {
   }
 };
 
-// Delete comment by id and task id
+// Delete comment by id
 exports.deleteComment = async (req, res, next) => {
   try {
     const { commentId } = req.params;
@@ -92,22 +92,5 @@ exports.deleteComment = async (req, res, next) => {
     res.status(204).send();
   } catch (error) {
     next(new AppError("Erro ao deletar comentário.", 500));
-  }
-};
-
-// Get current user comments
-exports.getMy = async (req, res, next) => {
-  try {
-    const userId = req.user.id;
-
-    const comments = await Comments.findAll({ where: { userId } });
-
-    if (!comments || comments.length === 0) {
-      next(new AppError("Nenhum comentário encontrado.", 404));
-    }
-
-    res.status(200).json({ comments });
-  } catch (error) {
-    next(new AppError("Erro ao buscar comentários.", 500));
   }
 };

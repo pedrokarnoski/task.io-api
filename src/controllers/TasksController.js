@@ -117,7 +117,6 @@ exports.getMy = async (req, res, next) => {
 
     res.status(200).json({ tasks });
   } catch (error) {
-    console.log(error);
     next(new AppError('Erro ao buscar usuário.', 500));
   }
 };
