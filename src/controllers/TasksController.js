@@ -1,4 +1,5 @@
 const Task = require('../models/task');
+const Comments = require("../models/Comments");
 const AppError = require("../utils/AppError");
 
 // Get all tasks
@@ -94,6 +95,13 @@ exports.deleteTask = async (req, res, next) => {
 
     if (!task) {
       next(new AppError('Tarefa não encontrado.', 404));
+    }
+
+    // Task related comments
+    const comments = await Comments.findAll({ where: { taskId } });
+
+    for (let comment of comments) {
+      await comment.destroy();
     }
 
     await task.destroy();
