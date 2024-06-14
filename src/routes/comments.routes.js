@@ -6,9 +6,8 @@ const router = require('express').Router();
 router.use(checkAuthMiddleware);
 
 // CRUD Routes
-router.get('/my', controller.getMy); /** /comments/my **/
 router.get('/:taskId', controller.getCommentByTaskId); /** /comments/:taskId **/
 router.post('/', controller.createComment); /** /comments **/
-router.delete('/:taskId', controller.deleteComment); /** /comments/:taskId/ **/
+router.delete('/:commentId', controller.deleteComment); /** /comments/:commentId/ **/
 
 module.exports = router;

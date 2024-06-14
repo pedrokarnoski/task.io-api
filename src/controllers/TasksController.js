@@ -1,4 +1,5 @@
 const Task = require('../models/task');
+const Comments = require("../models/Comments");
 const AppError = require("../utils/AppError");
 
 // Get all tasks
@@ -96,6 +97,13 @@ exports.deleteTask = async (req, res, next) => {
       next(new AppError('Tarefa não encontrado.', 404));
     }
 
+    // Task related comments
+    const comments = await Comments.findAll({ where: { taskId } });
+
+    for (let comment of comments) {
+      await comment.destroy();
+    }
+
     await task.destroy();
 
     res.status(204).send();
@@ -117,7 +125,6 @@ exports.getMy = async (req, res, next) => {
 
     res.status(200).json({ tasks });
   } catch (error) {
-    console.log(error);
     next(new AppError('Erro ao buscar usuário.', 500));
   }
 };
