@@ -11,6 +11,106 @@
     }
   ],
   "paths": {
+    "/authenticate": {
+      "post": {
+        "summary": "Autenticação de sessão",
+        "description": "Essa rota será responsável por fazer login na aplicação.",
+        "tags": [
+          "Authenticate"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "comment": {
+                  "value": {
+                    "username": "admin",
+                    "password": "admin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "comment": {
+                    "value": {
+                      "username": "admin"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sign-out": {
+      "post": {
+        "summary": "Logoff da aplicação",
+        "description": "Essa rota será responsável por fazer logoff na aplicação.",
+        "tags": [
+          "Sign out"
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "comment": {
+                    "value": {
+                      "message": "Logout realizado com sucesso."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "Busca de usuários",
@@ -356,12 +456,12 @@
         }
       }
     },
-    "/comments/my": {
+    "/tasks": {
       "get": {
-        "summary": "Busca de comentários do usuário logado",
-        "description": "Essa rota será responsável por buscar todos os comentários do usuário atualmente autenticado.",
+        "summary": "Busca de tarefas",
+        "description": "Essa rota será responsável por buscar todos as tarefas cadastrados.",
         "tags": [
-          "Comments"
+          "Tasks"
         ],
         "security": [
           {
@@ -373,7 +473,7 @@
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Nenhum comentário encontrado"
+            "description": "Nenhuma tarefa encontrada"
           },
           "200": {
             "description": "OK",
@@ -382,38 +482,315 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "content": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string"
-                      },
-                      "updatedAt": {
-                        "type": "string"
-                      }
-                    }
+                    "$ref": "#/components/schemas/task"
                   }
                 },
                 "examples": {
-                  "commentList": {
+                  "userList": {
                     "value": {
-                      "comments": [
+                      "tasks": [
                         {
                           "id": 1,
-                          "content": "Comentário 1",
-                          "createdAt": "2024-05-29T02:23:43.087Z",
-                          "updatedAt": "2024-05-29T02:23:43.087Z"
+                          "description": "Estudar",
+                          "userId": 1,
+                          "completed": true,
+                          "createdAt": "2024-06-12T00:31:16.554Z",
+                          "updatedAt": "2024-06-12T00:31:16.554Z"
                         },
                         {
                           "id": 2,
-                          "content": "Comentário 2",
-                          "createdAt": "2024-05-29T02:23:43.087Z",
-                          "updatedAt": "2024-05-29T02:23:43.087Z"
+                          "description": "Fazer compras",
+                          "userId": 2,
+                          "completed": false,
+                          "createdAt": "2024-06-14T00:31:16.554Z",
+                          "updatedAt": "2024-06-14T00:31:16.554Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastro de tarefa",
+        "description": "Essa rota será responsável por cadastrar uma nova tarefa.",
+        "tags": [
+          "Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "items": {
+                  "$ref": "#/components/schemas/task"
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "description": "Tarefa 1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/task"
+                  }
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "task": {
+                        "id": 1,
+                        "description": "Tarefa 1",
+                        "userId": 1,
+                        "completed": false,
+                        "updatedAt": "2024-06-13T23:34:25.626Z",
+                        "createdAt": "2024-06-13T23:34:25.626Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}": {
+      "get": {
+        "summary": "Busca de tarefa por ID",
+        "description": "Essa rota será responsável por buscar a tarefa especificada por ID.",
+        "tags": [
+          "Tasks"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da tarefa para busca",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhuma tarefa encontrada"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/task"
+                  }
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "task": {
+                        "id": 1,
+                        "description": "Tarefa 1",
+                        "userId": 1,
+                        "completed": false,
+                        "updatedAt": "2024-06-13T23:34:25.626Z",
+                        "createdAt": "2024-06-13T23:34:25.626Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualização de tarefa por ID",
+        "description": "Esta rota é responsável por atualizar os dados da tarefa especificada por ID.",
+        "tags": [
+          "Tasks"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da tarefa para atualização",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "items": {
+                  "$ref": "#/components/schemas/task"
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "description": "Tarefa atualizada",
+                    "completed": "true"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhuma tarefa encontrada"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/task"
+                  }
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "id": 1,
+                      "description": "Tarefa atualizada",
+                      "userId": 1,
+                      "completed": true,
+                      "createdAt": "2024-06-14T01:09:59.333Z",
+                      "updatedAt": "2024-06-14T01:09:59.333Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Exclusão de tarefa por ID",
+        "description": "Esta rota é responsável por excluir a tarefa especificado por ID.",
+        "tags": [
+          "Tasks"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da tarefa para exclusão",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhuma tarefa encontrada"
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/tasks/my": {
+      "get": {
+        "summary": "Busca tarefas do usuário logado",
+        "description": "Essa rota será responsável por buscar as tarefas do usuário atualmente autenticado.",
+        "tags": [
+          "Tasks"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Nenhum usuário encontrado"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/task"
+                  }
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "tasks": [
+                        {
+                          "id": 1,
+                          "description": "Tarefa 1",
+                          "userId": 1,
+                          "completed": false,
+                          "createdAt": "2024-06-14T00:31:16.554Z",
+                          "updatedAt": "2024-06-14T00:31:16.554Z"
+                        },
+                        {
+                          "id": 2,
+                          "description": "Tarefa 2",
+                          "userId": 1,
+                          "completed": false,
+                          "createdAt": "2024-06-14T01:09:59.333Z",
+                          "updatedAt": "2024-06-14T01:09:59.333Z"
                         }
                       ]
                     }
@@ -451,8 +828,8 @@
               "examples": {
                 "comment": {
                   "value": {
-                    "taskId": 1,
-                    "comment": "Comentário 1"
+                    "content": "Comentário 1",
+                    "taskId": 1
                   }
                 }
               }
@@ -493,6 +870,8 @@
                       "comment": {
                         "id": 1,
                         "content": "Comentário 1",
+                        "userId": 1,
+                        "taskId": 1,
                         "createdAt": "2024-05-29T02:23:43.087Z",
                         "updatedAt": "2024-05-29T02:23:43.087Z"
                       }
@@ -566,12 +945,16 @@
                         {
                           "id": 1,
                           "content": "Comentário 1",
+                          "userId": 1,
+                          "taskId": 1,
                           "createdAt": "2024-05-29T02:23:43.087Z",
                           "updatedAt": "2024-05-29T02:23:43.087Z"
                         },
                         {
                           "id": 2,
                           "content": "Comentário 2",
+                          "userId": 2,
+                          "taskId": 2,
                           "createdAt": "2024-05-29T02:23:43.087Z",
                           "updatedAt": "2024-05-29T02:23:43.087Z"
                         }
@@ -585,9 +968,9 @@
         }
       }
     },
-    "/comments/{taskId}/{commentId}": {
+    "/comments/{commentId}": {
       "delete": {
-        "summary": "Exclusão de comentário por ID da tarefa e ID do comentário",
+        "summary": "Exclusão de comentário por ID",
         "description": "Esta rota é responsável por excluir o comentário especificado por ID da tarefa e ID do comentário.",
         "tags": [
           "Comments"
@@ -656,6 +1039,29 @@
           }
         }
       },
+      "task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
       "comments": {
         "type": "object",
         "properties": {
@@ -678,7 +1084,6 @@
             "type": "string"
           }
         }
-      
       }
     },
     "securitySchemes": {
