@@ -62,35 +62,34 @@ exports.updateUser = async (req, res, next) => {
     const user = await User.findByPk(userId);
 
     if (!user) {
-      next(new AppError("Usuário não encontrado", 404));
+      return next(new AppError("Usuário não encontrado", 404));
     }
 
-    if (newPassword && !oldPassword) {
-      next(AppError(
-        "Você precisa informar a senha antiga para definir a nova senha.",
-      ));
+    if (newPassword) {
+      if (!oldPassword) {
+        return next(new AppError(
+          "Você precisa informar a senha antiga para definir a nova senha.",
+        ));
+      }
+
+      const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordCorrect) {
+        return next(new AppError('Senha antiga incorreta.', 400));
+      }
+
+      const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+      user.password = hashedNewPassword;
     }
 
-    if (!newPassword && oldPassword) {
-      next(AppError("Informe a nova senha."));
+    if (name) {
+      user.name = name;
     }
-
-    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
-    if (!isPasswordCorrect) {
-
-      next(new AppError('Senha antiga incorreta.'));
-    }
-
-    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
-
-    user.name = name;
-    user.password = hashedNewPassword;
 
     await user.save();
 
     return res.status(200).json(user);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     next(new AppError('Erro ao atualizar usuário.', 500));
   }
 };

@@ -115,7 +115,7 @@ exports.deleteTask = async (req, res, next) => {
 // Current user tasks
 exports.getMy = async (req, res, next) => {
   try {
-    const { userId } = req.user.id;
+    const userId = req.user.id;
 
     const tasks = await Task.findAll({ where: userId });
 
