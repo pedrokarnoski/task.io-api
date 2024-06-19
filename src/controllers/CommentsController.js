@@ -1,4 +1,4 @@
-const Comments = require("../models/Comments");
+const Comments = require("../models/comments");
 const AppError = require("../utils/AppError");
 
 // Get all comments
