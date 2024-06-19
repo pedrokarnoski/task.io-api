@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --env-file=.env src/app.js",
+    "start": "node --env-file=.env src/app.js",
     "start:all": "concurrently --names \"BACK,FRONT\" --prefix-colors \"bgGreen.bold,bgBlue.bold\" \"npm run dev\" \"npm run dev --prefix ../task.io-app\""
   },
   "keywords": [],
