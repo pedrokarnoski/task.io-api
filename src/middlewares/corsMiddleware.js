@@ -1,8 +1,8 @@
 const cors = require('cors');
 
 const allowedOrigins = {
-  development: process.env.DEV_ORIGIN,
-  production: process.env.PROD_ORIGIN
+  development: [process.env.DEV_ORIGIN],
+  production: [process.env.PROD_ORIGIN, 'https://task-io.vercel.app']
 };
 
 const corsOptions = {
@@ -10,7 +10,10 @@ const corsOptions = {
     const env = process.env.NODE_ENV || 'development';
     const allowedOrigin = allowedOrigins[env];
 
-    if (origin === allowedOrigin || !origin) {
+    console.log(`Origin: ${origin}`);
+    console.log(`Allowed Origins: ${allowedOrigin}`);
+
+    if (allowedOrigin.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
