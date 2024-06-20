@@ -2,7 +2,7 @@ const cors = require('cors');
 
 const allowedOrigins = {
   development: [process.env.DEV_ORIGIN],
-  production: [process.env.PROD_ORIGIN, 'https://task-io.vercel.app']
+  production: [process.env.PROD_ORIGIN, 'https://task-io.koyeb.app']
 };
 
 const corsOptions = {
@@ -13,14 +13,14 @@ const corsOptions = {
     console.log(`Origin: ${origin}`);
     console.log(`Allowed Origins: ${allowedOrigin}`);
 
-    if (allowedOrigin.includes(origin) || !origin) {
+    if (!origin || allowedOrigin.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   credentials: true,
 };
 
