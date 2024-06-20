@@ -25,7 +25,12 @@ exports.authenticate = async (req, res, next) => {
     // console.log('Token:' + token)
 
     return res
-      .cookie('access_token', token, { httpOnly: true, maxAge: 3600000 })
+      .cookie('access_token', token, {
+        httpOnly: true,
+        maxAge: 3600000,
+        secure: true, // Somente enviar o cookie em conexões HTTPS
+        sameSite: 'None', // Permitir enviar o cookie cross-site
+      })
       .status(200)
       .json({
         username: user.username,
