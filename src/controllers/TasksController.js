@@ -117,7 +117,7 @@ exports.getMy = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const tasks = await Task.findAll({ where: userId });
+    const tasks = await Task.findAll({ where: { userId: userId } });
 
     if (!tasks) {
       next(new AppError('Sem tarefas cadastradas.', 404));
