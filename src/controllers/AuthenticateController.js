@@ -20,12 +20,12 @@ exports.authenticate = async (req, res, next) => {
       return next(new AppError('Senha inválida.', 401));
     }
 
-    const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     return res
       .cookie('access_token', token, {
         httpOnly: true,
-        maxAge: 3600000,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
         secure: true, // Somente enviar o cookie em conexões HTTPS
         sameSite: 'None', // Permitir enviar o cookie cross-site
       })
