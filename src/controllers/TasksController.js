@@ -117,14 +117,35 @@ exports.getMy = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const tasks = await Task.findAll({ where: { userId: userId } });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
 
-    if (!tasks) {
-      next(new AppError('Sem tarefas cadastradas.', 404));
+    const offset = (page - 1) * limit;
+
+    const result = await Task.findAndCountAll({
+      where: { userId: userId },
+      limit: limit,
+      offset: offset,
+    });
+
+    if (!result.rows.length) {
+      return next(new AppError('Sem tarefas cadastradas.', 404));
     }
 
-    res.status(200).json({ tasks });
+    const totalCount = result.count;
+    const pageIndex = page - 1;
+    const perPage = limit;
+
+    res.status(200).json({
+      tasks: result.rows,
+      meta: {
+        pageIndex: pageIndex,
+        perPage: perPage,
+        totalCount: totalCount,
+      },
+    });
   } catch (error) {
     next(new AppError('Erro ao buscar usuário.', 500));
   }
 };
+
