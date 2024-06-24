@@ -119,18 +119,33 @@ exports.getMy = async (req, res, next) => {
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
+    const sort = req.query.sort || 'toDo';
 
     const offset = (page - 1) * limit;
 
+    // Ordenação
+    let order;
+    if (sort === 'completed') {
+      order = [['completed', 'DESC'], ['createdAt', 'DESC']];
+    } else {
+      // Padrão 'A fazer'
+      order = [['completed', 'ASC'], ['createdAt', 'DESC']];
+    }
+
     const result = await Task.findAndCountAll({
       where: { userId: userId },
-      limit: limit,
-      offset: offset,
+      limit,
+      offset,
+      order,
     });
 
     if (!result.rows.length) {
       return next(new AppError('Sem tarefas cadastradas.', 404));
     }
+
+    const completedTotalCount = await Task.count({
+      where: { userId: userId, completed: true },
+    });
 
     const totalCount = result.count;
     const pageIndex = page - 1;
@@ -139,9 +154,10 @@ exports.getMy = async (req, res, next) => {
     res.status(200).json({
       tasks: result.rows,
       meta: {
-        pageIndex: pageIndex,
-        perPage: perPage,
-        totalCount: totalCount,
+        pageIndex,
+        perPage,
+        totalCount,
+        completedTotalCount
       },
     });
   } catch (error) {
