@@ -117,14 +117,51 @@ exports.getMy = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const tasks = await Task.findAll({ where: { userId: userId } });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const sort = req.query.sort || 'toDo';
 
-    if (!tasks) {
-      next(new AppError('Sem tarefas cadastradas.', 404));
+    const offset = (page - 1) * limit;
+
+    // Ordenação
+    let order;
+    if (sort === 'completed') {
+      order = [['completed', 'DESC'], ['createdAt', 'DESC']];
+    } else {
+      // Padrão 'A fazer'
+      order = [['completed', 'ASC'], ['createdAt', 'DESC']];
     }
 
-    res.status(200).json({ tasks });
+    const result = await Task.findAndCountAll({
+      where: { userId: userId },
+      limit,
+      offset,
+      order,
+    });
+
+    if (!result.rows.length) {
+      return next(new AppError('Sem tarefas cadastradas.', 404));
+    }
+
+    const completedTotalCount = await Task.count({
+      where: { userId: userId, completed: true },
+    });
+
+    const totalCount = result.count;
+    const pageIndex = page - 1;
+    const perPage = limit;
+
+    res.status(200).json({
+      tasks: result.rows,
+      meta: {
+        pageIndex,
+        perPage,
+        totalCount,
+        completedTotalCount
+      },
+    });
   } catch (error) {
     next(new AppError('Erro ao buscar usuário.', 500));
   }
 };
+
